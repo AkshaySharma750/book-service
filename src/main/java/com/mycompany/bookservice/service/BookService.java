@@ -12,5 +12,7 @@ public interface BookService {
     public  void deleteBook(Long bookId);
     public  BookDTO updateBookPrice(BookDTO bookDTO, long bookId);
     public  List<BookDTO> getAllBooks();
+    public BookDTO getBook(Long bookId);
+
 
 }

@@ -4,6 +4,7 @@ import com.mycompany.bookservice.dto.BookDTO;
 import com.mycompany.bookservice.entity.BookEntity;
 import com.mycompany.bookservice.repository.BookRepository;
 import com.mycompany.bookservice.service.BookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -48,7 +50,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(Long bookId) {
-    bookRepository.deleteById(bookId);
+        bookRepository.deleteById(bookId);
     }
     //partialvupdate - only update price
     @Override
@@ -68,6 +70,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDTO> getAllBooks() {
 
+        log.info("Entering method getAllBooks in BookService");
         List<BookEntity> bookEntities = bookRepository.findAll();
         List<BookDTO> bookDtos = null;
 
@@ -80,7 +83,21 @@ public class BookServiceImpl implements BookService {
                 bookDtos.add(dto);
             }
        }
+        log.info("Exiting method getAllBooks in BookService");
        return bookDtos;
         }
+
+    @Override
+    public BookDTO getBook(Long bookId) {
+        log.info("Entering method getBook in BookService");
+        Optional<BookEntity> optBook = bookRepository.findById(bookId);
+        BookDTO bookDTO = null;
+        if(optBook.isPresent()){
+            bookDTO = new BookDTO();
+            BeanUtils.copyProperties(optBook.get(), bookDTO);
+        }
+        log.info("Exiting method getBook in BookService");
+        return bookDTO;
     }
+}
 
